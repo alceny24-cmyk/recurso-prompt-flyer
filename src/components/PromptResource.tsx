@@ -29,7 +29,7 @@ export function PromptResource({
     <main className="mx-auto flex min-h-screen w-full max-w-[600px] flex-col px-6 pt-[4.375rem] pb-14 sm:pt-[6.25rem] sm:pb-20">
       <header className="flex items-center gap-2">
         <span className="text-[15px] font-semibold tracking-tight text-ink">
-          Expreso
+          Alceny Marketing
         </span>
       </header>
 
@@ -151,7 +151,7 @@ export function PromptResource({
       </section>
 
       <footer className="mt-20 pb-6 sm:mt-28">
-        <p className="text-[13px] text-muted/60">Expreso</p>
+        <p className="text-[13px] text-muted/60">Alceny Marketing</p>
       </footer>
     </main>
   );
