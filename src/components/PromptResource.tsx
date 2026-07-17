@@ -10,6 +10,7 @@ type PromptResourceProps = {
   outcomes: string[];
   promptText: string;
   tip: { label: string; text: string };
+  example?: { src: string; caption: string };
 };
 
 export function PromptResource({
@@ -22,6 +23,7 @@ export function PromptResource({
   outcomes,
   promptText,
   tip,
+  example,
 }: PromptResourceProps) {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-[600px] flex-col px-6 pt-[4.375rem] pb-14 sm:pt-[6.25rem] sm:pb-20">
@@ -99,6 +101,33 @@ export function PromptResource({
           ))}
         </ul>
       </section>
+
+      {example && (
+        <section className="mt-20 sm:mt-24">
+          <h2 className="text-[20px] font-semibold text-ink">
+            Ejemplo del resultado
+          </h2>
+          <div className="mt-4 overflow-hidden rounded-[10px] border border-border">
+            <iframe
+              src={example.src}
+              title={example.caption}
+              loading="lazy"
+              className="h-[420px] w-full"
+            />
+          </div>
+          <div className="mt-3 flex items-baseline justify-between gap-3">
+            <p className="text-[13px] text-muted">{example.caption}</p>
+            <a
+              href={example.src}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 text-[13px] font-medium text-muted underline decoration-border underline-offset-2 transition-colors hover:text-primary"
+            >
+              Abrir en pantalla completa
+            </a>
+          </div>
+        </section>
+      )}
 
       <section className="mt-12 sm:mt-14">
         <div className="rounded-[10px] border border-border">

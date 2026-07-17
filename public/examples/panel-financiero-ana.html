@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Panel financiero — Ana Rodríguez</title>
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #12161d;
+    --surface-2: #171c24;
+    --border: #232a34;
+    --text-primary: #e8eaed;
+    --text-secondary: #96a0ad;
+    --text-muted: #626b76;
+    --accent: #4fd1c5;
+    --success: #3dd68c;
+    --success-bg: rgba(61, 214, 140, 0.14);
+    --warning: #f5b942;
+    --warning-bg: rgba(245, 185, 66, 0.14);
+    --danger: #f0615c;
+    --danger-bg: rgba(240, 97, 92, 0.16);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .mono {
+    font-family: "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Liberation Mono", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  header.top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    padding-bottom: 1.75rem;
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .who .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.4rem;
+  }
+
+  .who h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .who p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .period {
+    text-align: right;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+
+  .period strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+  }
+
+  .card .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 0.5rem;
+  }
+
+  .card .value {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .card.income .value { color: var(--success); }
+  .card.debt .value { color: var(--danger); }
+  .card.receivable .value { color: var(--warning); }
+
+  section.block {
+    margin-bottom: 2.25rem;
+  }
+
+  section.block h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .goal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.4rem;
+  }
+
+  .goal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .goal-top .goal-name {
+    font-size: 15px;
+    color: var(--text-primary);
+  }
+
+  .goal-top .goal-pct {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .bar-track {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  .goal-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.6rem;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .goal-foot .now { color: var(--text-primary); font-weight: 600; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td.amount { text-align: right; }
+  th.amount { text-align: right; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge.ok { background: var(--success-bg); color: var(--success); }
+  .badge.pending { background: var(--warning-bg); color: var(--warning); }
+  .badge.urgent { background: var(--danger-bg); color: var(--danger); }
+
+  tr.urgent-row td { background: var(--danger-bg); }
+  tr.urgent-row td:first-child { border-left: 2px solid var(--danger); }
+
+  .due {
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+
+  footer.note {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 520px) {
+    .who h1 { font-size: 22px; }
+    .period { text-align: left; }
+    header.top { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="who">
+      <p class="eyebrow">Panel financiero</p>
+      <h1>Ana Rodríguez</h1>
+      <p>Estilista independiente · Santiago, República Dominicana</p>
+    </div>
+    <div class="period">
+      <strong>Julio 2026</strong>
+      Resumen del mes
+    </div>
+  </header>
+
+  <div class="cards">
+    <div class="card income">
+      <p class="label">Ingresos del mes</p>
+      <p class="value mono">RD$42,800</p>
+    </div>
+    <div class="card">
+      <p class="label">Ahorros actuales</p>
+      <p class="value mono">RD$18,500</p>
+    </div>
+    <div class="card debt">
+      <p class="label">Deudas totales</p>
+      <p class="value mono">RD$22,000</p>
+    </div>
+    <div class="card receivable">
+      <p class="label">Por cobrar</p>
+      <p class="value mono">RD$8,500</p>
+    </div>
+  </div>
+
+  <section class="block">
+    <h2>Meta de ahorro</h2>
+    <div class="goal-card">
+      <div class="goal-top">
+        <span class="goal-name">Comprar carro — diciembre 2026</span>
+        <span class="goal-pct mono">12%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 12%;"></div>
+      </div>
+      <div class="goal-foot">
+        <span class="now mono">RD$18,500 ahorrados</span>
+        <span class="mono">Meta: RD$150,000</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Ingresos</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fuente</th>
+            <th class="amount">Monto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Salón de belleza (servicios)</td>
+            <td class="amount mono">RD$24,000</td>
+            <td><span class="badge ok">Cobrado</span></td>
+          </tr>
+          <tr>
+            <td>Clientes a domicilio</td>
+            <td class="amount mono">RD$8,500</td>
+            <td><span class="badge ok">Cobrado</span></td>
+          </tr>
+          <tr>
+            <td>Venta productos capilares</td>
+            <td class="amount mono">RD$6,300</td>
+            <td><span class="badge ok">Cobrado</span></td>
+          </tr>
+          <tr>
+            <td>Manicure y pedicure</td>
+            <td class="amount mono">RD$4,000</td>
+            <td><span class="badge ok">Cobrado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Deudas</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Deuda</th>
+            <th>Vence</th>
+            <th class="amount">Monto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="urgent-row">
+            <td>Tarjeta Popular</td>
+            <td class="due">20 de julio</td>
+            <td class="amount mono">RD$9,500</td>
+            <td><span class="badge urgent">Urgente</span></td>
+          </tr>
+          <tr>
+            <td>Préstamo mamá</td>
+            <td class="due">—</td>
+            <td class="amount mono">RD$7,000</td>
+            <td><span class="badge pending">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td>Proveedor productos</td>
+            <td class="due">—</td>
+            <td class="amount mono">RD$5,500</td>
+            <td><span class="badge pending">Pendiente</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Gastos pagados este mes</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th class="amount">Monto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Renta salón</td>
+            <td class="amount mono">RD$8,000</td>
+            <td><span class="badge ok">Pagado</span></td>
+          </tr>
+          <tr>
+            <td>Renta apartamento</td>
+            <td class="amount mono">RD$7,500</td>
+            <td><span class="badge ok">Pagado</span></td>
+          </tr>
+          <tr>
+            <td>Luz</td>
+            <td class="amount mono">RD$2,200</td>
+            <td><span class="badge ok">Pagado</span></td>
+          </tr>
+          <tr>
+            <td>Mercado quincenal</td>
+            <td class="amount mono">RD$5,800</td>
+            <td><span class="badge ok">Pagado</span></td>
+          </tr>
+          <tr>
+            <td>Transporte</td>
+            <td class="amount mono">RD$2,400</td>
+            <td><span class="badge ok">Pagado</span></td>
+          </tr>
+          <tr>
+            <td>Teléfono</td>
+            <td class="amount mono">RD$1,500</td>
+            <td><span class="badge ok">Pagado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Pendiente por cobrar</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th class="amount">Monto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Boda Sandra — peinado</td>
+            <td class="amount mono">RD$4,500</td>
+            <td><span class="badge pending">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td>Cliente quinceañera</td>
+            <td class="amount mono">RD$2,500</td>
+            <td><span class="badge pending">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td>Productos — pedido Juana</td>
+            <td class="amount mono">RD$1,500</td>
+            <td><span class="badge pending">Pendiente</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="note">Generado a partir del Prompt #002 de Expreso — datos de ejemplo</footer>
+</div>
+</body>
+</html>

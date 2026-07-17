@@ -42,6 +42,10 @@ export default function FinanceDashboard() {
         "Un diseño visual moderno, listo para usar",
       ]}
       promptText={FINANCE_DASHBOARD_PROMPT}
+      example={{
+        src: "/examples/panel-financiero-ana.html",
+        caption: "Ejemplo con datos de muestra.",
+      }}
       tip={{
         label: "Consejo profesional",
         text: "Reemplaza todos los datos entre corchetes con tu información real antes de copiar el prompt. Cuanta más información agregues, más completo será tu panel.",
